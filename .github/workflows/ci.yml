@@ -26,17 +26,16 @@ jobs:
           pip install nutter==0.1.35
           pip install databricks-cli==0.17.3
           
-      - name: Extract branch name
-        shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-        id: extract_branch
+      - name: Get branch name
+        id: branch-name
+        uses: tj-actions/branch-names@v6
           
       - name: Checkout code in staging folder and run tests
         env:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
         run: |
-          databricks repos update --path ${{ vars.STAGING_DIRECTORY }} --branch "${{ steps.extract_branch.outputs.branch }}"
+          databricks repos update --path ${{ vars.STAGING_DIRECTORY }} --branch "${{ steps.branch-name.outputs.current_branch }}"
           nutter run "${{ vars.STAGING_DIRECTORY }}/unit-tests/" --cluster_id ${{ vars.CLUSTER_ID }} --recursive --junit_report --timeout 500                        
   
       - name: Publish Test Report
