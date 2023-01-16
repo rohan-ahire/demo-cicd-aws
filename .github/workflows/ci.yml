@@ -36,7 +36,7 @@ jobs:
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
         run: |
           databricks repos update --path ${{ vars.STAGING_DIRECTORY }} --branch "${{ steps.branch-name.outputs.current_branch }}"
-          nutter run "${{ vars.STAGING_DIRECTORY }}/unit-tests/" --cluster_id ${{ vars.CLUSTER_ID }} --recursive --junit_report --timeout 500                        
+          nutter run "${{ vars.STAGING_DIRECTORY }}/unit-tests/" --cluster_id "${{ vars.CLUSTER_ID }}" --recursive --junit_report --timeout 500                       
   
       - name: Publish Test Report
         uses: mikepenz/action-junit-report@v3
