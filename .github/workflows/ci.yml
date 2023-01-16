@@ -28,8 +28,8 @@ jobs:
           
       - name: Checkout code in staging folder and run tests
         env:
-          DATABRICKS_HOST: $(DATABRICKS_HOST)
-          DATABRICKS_TOKEN: $(DATABRICKS_TOKEN)
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
         run: |
           databricks repos update --path ${{ vars.STAGING_DIRECTORY }} --branch "main"
           nutter run "${{ vars.STAGING_DIRECTORY }}/unit-tests/" --cluster_id ${{ vars.CLUSTER_ID }} --recursive --junit_report --timeout 500        
