@@ -1,0 +1,22 @@
+version: 0.2
+phases:
+  pre_build:
+    commands:
+      - BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
+      - echo "Branch Name: $BRANCH_NAME"
+  install:
+    commands:
+      - pip install nutter==0.1.35
+      - pip install databricks-cli==0.17.3
+      - pip install junit-reporter
+  build:
+    commands:
+      - databricks repos update --path ${STAGING_DIRECTORY} --branch "$BRANCH_NAME"
+  test:
+    commands:
+      - nutter run "${STAGING_DIRECTORY}/unit-tests/" --cluster_id "${CLUSTER_ID}" --recursive --junit_report --timeout 500
+      - echo "Test Results generated successfully"
+  post_build:
+    commands:
+      - junit-reporter --input-junit-xml=test_results.xml --output-junit-xml=junit-report.xml
+      - aws s3 cp junit-report.xml s3://bucket-name/path/to/junit-report.xml
