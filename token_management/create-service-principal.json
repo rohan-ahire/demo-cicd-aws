@@ -1,0 +1,15 @@
+{
+    "displayName": "rohan_sp_aws",
+    "entitlements": [
+      {
+        "value": "allow-cluster-create"
+      }
+    ],
+    "groups": [
+      {
+        "value": "admins"
+      }
+    ],
+    "schemas": [ "urn:ietf:params:scim:schemas:core:2.0:ServicePrincipal" ],
+    "active": true
+  }
